@@ -12,7 +12,7 @@ class Settings:
     
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL", 
-        "mysql+pymysql://root:password@localhost:3306/haivler"
+        "mysql+pymysql://root:password@localhost:3307/haivler"
     )
     
     MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "localhost:9000")

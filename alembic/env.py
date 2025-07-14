@@ -19,7 +19,7 @@ target_metadata = Base.metadata
 def get_database_url():
     return os.getenv(
         "DATABASE_URL", 
-        "mysql+pymysql://haivler_user:haivler_password@localhost:3306/haivler"
+        "mysql+pymysql://haivler_user:haivler_password@localhost:3307/haivler"
     )
 
 def run_migrations_offline() -> None:
