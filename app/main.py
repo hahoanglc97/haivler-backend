@@ -118,3 +118,68 @@ def obfuscated_posts_create(
     current_user: models.User = Depends(get_current_user)
 ):
     return posts.create_post(title, description, image, db, current_user)
+
+@app.get("/api/x/ff0d498c575b/{post_id}")  # Get single post
+def obfuscated_get_post(post_id: int, db: Session = Depends(get_db)):
+    return posts.read_post(post_id, db)
+
+@app.put("/api/x/ff0d498c575b/{post_id}")  # Update post
+def obfuscated_update_post(
+    post_id: int,
+    post_update: schemas.PostUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    return posts.update_post(post_id, post_update, db, current_user)
+
+@app.delete("/api/x/ff0d498c575b/{post_id}")  # Delete post
+def obfuscated_delete_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    return posts.delete_post(post_id, db, current_user)
+
+# Comments endpoints
+@app.get("/api/x/ff0d498c575b/{post_id}/comments")  # Get comments
+def obfuscated_get_comments(post_id: int, db: Session = Depends(get_db)):
+    return comments.read_comments(post_id, db)
+
+@app.post("/api/x/ff0d498c575b/{post_id}/comments")  # Create comment
+def obfuscated_create_comment(
+    post_id: int,
+    comment: schemas.CommentCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    return comments.create_comment(post_id, comment, db, current_user)
+
+@app.delete("/api/x/0ebcf2cda524/{comment_id}")  # Delete comment
+def obfuscated_delete_comment(
+    comment_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    return comments.delete_comment(comment_id, db, current_user)
+
+# Reactions endpoints
+@app.get("/api/x/ff0d498c575b/{post_id}/reactions")  # Get reactions
+def obfuscated_get_reactions(post_id: int, db: Session = Depends(get_db)):
+    return reactions.get_post_reactions(post_id, db)
+
+@app.post("/api/x/ff0d498c575b/{post_id}/reaction")  # Create reaction
+def obfuscated_create_reaction(
+    post_id: int,
+    reaction: schemas.ReactionCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    return reactions.create_or_update_reaction(post_id, reaction, db, current_user)
+
+@app.delete("/api/x/ff0d498c575b/{post_id}/reaction")  # Delete reaction
+def obfuscated_delete_reaction(
+    post_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    return reactions.delete_reaction(post_id, db, current_user)
