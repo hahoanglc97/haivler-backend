@@ -79,4 +79,3 @@ volumes:
 
 networks:
   haivler_network:
-    external: true
