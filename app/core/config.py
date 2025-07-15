@@ -24,7 +24,9 @@ class Settings:
     CORS_ORIGINS: list = [
         "http://localhost:3000",
         "http://localhost:8080",
-        "http://localhost:3001"
+        "http://localhost:3001",
+        "http://localhost:80",
+        "http://localhost"
     ]
 
 settings = Settings()
