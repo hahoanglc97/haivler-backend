@@ -79,3 +79,4 @@ volumes:
 
 networks:
   haivler_network:
+    name: haivler_network
