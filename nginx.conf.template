@@ -115,9 +115,7 @@ http {
 
         # File upload endpoints with even stricter rate limiting
         location ~ /api/x/ff0d498c575b$ {
-            if ($request_method = POST) {
-                limit_req zone=upload burst=2 nodelay;
-            }
+            limit_req zone=upload burst=2 nodelay;
             
             proxy_pass http://backend;
             proxy_set_header Host $host;
@@ -132,6 +130,11 @@ http {
             proxy_connect_timeout 120s;
             proxy_send_timeout 120s;
             proxy_read_timeout 120s;
+            
+            # Only allow POST method
+            limit_except POST {
+                deny all;
+            }
         }
 
         # System endpoints (health check, etc.)
