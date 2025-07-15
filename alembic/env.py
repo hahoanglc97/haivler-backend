@@ -17,10 +17,9 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 def get_database_url():
-    return os.getenv(
-        "DATABASE_URL", 
-        "mysql+pymysql://haivler_user:haivler_password@localhost:3307/haivler"
-    )
+    # Import the same URL used by the main application
+    from app.db.database import SQLALCHEMY_DATABASE_URL
+    return SQLALCHEMY_DATABASE_URL
 
 def run_migrations_offline() -> None:
     url = get_database_url()
