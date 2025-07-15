@@ -61,7 +61,7 @@ http {
 
     # Main server configuration
     server {
-        listen 8811;
+        listen ${NGINX_PORT};
         server_name _;
 
         # Cloudflare and security headers

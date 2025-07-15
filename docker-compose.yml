@@ -9,7 +9,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3307:3306"
+      - "${DB_PORT:-3307}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -40,14 +40,14 @@ services:
     container_name: haivler_backend
     restart: always
     ports:
-      - "8000:8000"  # Direct access for development
+      - "${BACKEND_PORT:-8000}:8000"  # Direct access for development
     expose:
       - "8000"
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DATABASE_URL=${DATABASE_URL}
       - DB_HOST=mysql
-      - DB_PORT=3306
+      - DB_PORT=${DB_PORT:-3307}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -69,9 +69,13 @@ services:
     container_name: haivler_nginx
     restart: always
     ports:
-      - "8811:8811"
+      - "${NGINX_PORT:-8811}:${NGINX_PORT:-8811}"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
+      - ./nginx-entrypoint.sh:/docker-entrypoint.sh:ro
+    environment:
+      - NGINX_PORT=${NGINX_PORT:-8811}
+    command: ["/bin/sh", "/docker-entrypoint.sh"]
     depends_on:
       - backend
     healthcheck:
