@@ -16,6 +16,8 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
+    networks:
+      - haivler_network_backend
 
   minio:
     image: minio/minio:latest
@@ -34,6 +36,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       timeout: 20s
       retries: 10
+    networks:
+      - haivler_network_backend
 
   backend:
     build: .
@@ -71,6 +75,7 @@ services:
       start_period: 60s
     networks:
       - haivler_network
+      - haivler_network_backend
 
 
 volumes:
@@ -80,3 +85,4 @@ volumes:
 networks:
   haivler_network:
     name: haivler_network
+  haivler_network_backend:
