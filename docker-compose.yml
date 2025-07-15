@@ -45,7 +45,7 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - DATABASE_URL=${DATABASE_URL}
       - DB_HOST=mysql
-      - DB_PORT=3307
+      - DB_PORT=3306
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}

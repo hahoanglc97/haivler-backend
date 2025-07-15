@@ -6,13 +6,13 @@ class Settings:
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-this-in-production")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "2a7af6a1f754ab24d54eee4de0c4be9bd6f50685ea6f566c")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL", 
-        "mysql+pymysql://root:password@localhost:3307/haivler"
+        "mysql+pymysql://haivler_user:Admin%40123@mysql:3306/haivler"
     )
     
     MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "localhost:9000")
