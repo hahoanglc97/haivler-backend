@@ -21,10 +21,10 @@ class Settings:
     MINIO_BUCKET_NAME: str = os.getenv("MINIO_BUCKET_NAME", "haivler-images")
     MINIO_SECURE: bool = os.getenv("MINIO_SECURE", "False").lower() == "true"
     
-    CORS_ORIGINS: list = [
-        "http://localhost:3000",
-        "http://localhost:8080",
-        "http://localhost:3001"
-    ]
+    # CORS Origins - can be set as comma-separated string in env
+    CORS_ORIGINS: list = os.getenv(
+        "CORS_ORIGINS", 
+        "http://localhost:3000,http://localhost:8080,http://localhost:3001"
+    ).split(",")
 
 settings = Settings()
