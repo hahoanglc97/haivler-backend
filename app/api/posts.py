@@ -19,11 +19,11 @@ def read_posts(
     query = db.query(models.Post)
     
     if sort == "popular":
-        query = query.outerjoin(models.Reaction).group_by(models.Post.id).order_by(
+        query = query.outerjoin(models.Reaction).join(models.User, models.User.id == models.Post.user_id).group_by(models.Post.id).order_by(
             desc(func.count(models.Reaction.id))
         )
     else:
-        query = query.order_by(desc(models.Post.created_at))
+        query = query.join(models.User, models.User.id == models.Post.user_id).order_by(desc(models.Post.created_at))
     
     posts = query.offset(skip * limit).limit(limit).all()
     return posts
@@ -53,7 +53,7 @@ def read_post(post_id: int, db: Session = Depends(get_db)):
 @router.post("/", response_model=schemas.Post)
 def create_post(
     title: str = Form(...),
-    description: Optional[str] = Form(None),
+    description: str = Form(None),
     image: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)

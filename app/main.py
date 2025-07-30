@@ -84,7 +84,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 def obfuscated_register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return auth.register(user, db)
 
-@app.post("/api/x/9592fc5373e2")  # Login endpoint  
+@app.post("/api/login")  # Login endpoint  
 def obfuscated_login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     return auth.login(form_data, db)
 
