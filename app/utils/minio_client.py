@@ -59,7 +59,10 @@ class MinIOClient:
             protocol = "https"
         else:
             protocol = "http"
-        return f"{protocol}://{settings.MINIO_ENDPOINT}/{self.bucket_name}/{object_name}"
+        # Use public URL
+        url = self.client.presigned_get_object(self.bucket_name, object_name)
+        # url = f"{protocol}://{settings.MINIO_ENDPOINT}/{self.bucket_name}/{object_name}"
+        return url
     
     def delete_file(self, object_name: str) -> bool:
         try:
