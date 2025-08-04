@@ -3,11 +3,15 @@ from sqlalchemy.orm import Session
 from ..db.database import get_db
 from ..db import models, schemas
 from ..core.security import get_current_user, get_password_hash, get_user_by_email
+from ..utils.minio_client import minio_client
 
 router = APIRouter()
 
 @router.get("/me", response_model=schemas.User)
 def read_users_me(current_user: models.User = Depends(get_current_user)):
+    print(f"Current user: {current_user}")
+    if current_user.avatar_url:
+        current_user.avatar_url = minio_client.build_file_url(current_user.avatar_url)
     return current_user
 
 @router.put("/me", response_model=schemas.User)
@@ -33,4 +37,8 @@ def update_user_me(
     
     db.commit()
     db.refresh(current_user)
+    
+    # Convert avatar_url to complete URL if it exists
+    if current_user.avatar_url:
+        current_user.avatar_url = minio_client.build_file_url(current_user.avatar_url)
     return current_user

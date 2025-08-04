@@ -26,6 +26,11 @@ def read_posts(
         query = query.join(models.User, models.User.id == models.Post.user_id).order_by(desc(models.Post.created_at))
     
     posts = query.offset(skip * limit).limit(limit).all()
+    
+    # Convert image_url to complete URLs
+    for post in posts:
+        post.image_url = minio_client.build_file_url(post.image_url)
+    
     return posts
 
 @router.get("/{post_id}", response_model=schemas.PostWithDetails)
@@ -45,6 +50,7 @@ def read_post(post_id: int, db: Session = Depends(get_db)):
     ).count()
     
     post_dict = post.__dict__.copy()
+    post_dict["image_url"] = minio_client.build_file_url(post.image_url)
     post_dict["like_count"] = like_count
     post_dict["dislike_count"] = dislike_count
     
@@ -69,6 +75,9 @@ def create_post(
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
+    
+    # Convert image_url to complete URL
+    db_post.image_url = minio_client.build_file_url(db_post.image_url)
     return db_post
 
 @router.put("/{post_id}", response_model=schemas.Post)
@@ -92,6 +101,9 @@ def update_post(
     
     db.commit()
     db.refresh(post)
+    
+    # Convert image_url to complete URL
+    post.image_url = minio_client.build_file_url(post.image_url)
     return post
 
 @router.delete("/{post_id}")
