@@ -59,10 +59,10 @@ class MinIOClient:
         else:
             protocol = "http"
         # Use public URL
-        # url = self.client.presigned_get_object(self.bucket_name, object_name)
-        url = f"{protocol}://{settings.MINIO_ENDPOINT}/{self.bucket_name}/{object_name}"
-        return url.replace("minio:9000", "localhost:9000")
-    
+        url = self.client.presigned_get_object(self.bucket_name, object_name)
+        # url = f"{protocol}://{settings.MINIO_ENDPOINT}/{self.bucket_name}/{object_name}"
+        return url.replace("minio:9000", f"{settings.CDN_ENDPOINT}")
+
     def delete_file(self, object_name: str) -> bool:
         try:
             object_name = object_name.split('/')[-1]

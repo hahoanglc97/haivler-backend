@@ -60,6 +60,7 @@ services:
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
       - MINIO_SECURE=${MINIO_SECURE}
+      - CDN_ENDPOINT=${CDN_ENDPOINT}
     depends_on:
       mysql:
         condition: service_healthy
