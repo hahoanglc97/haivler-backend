@@ -20,7 +20,9 @@ class Settings:
     MINIO_SECRET_KEY: str = os.getenv("MINIO_SECRET_KEY", "minioadmin")
     MINIO_BUCKET_NAME: str = os.getenv("MINIO_BUCKET_NAME", "haivler-images")
     MINIO_SECURE: bool = os.getenv("MINIO_SECURE", "False").lower() == "true"
-    
+
+    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "localhost:3000")
+
     # CORS Origins - can be set as comma-separated string in env
     CORS_ORIGINS: list = os.getenv(
         "CORS_ORIGINS", 

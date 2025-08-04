@@ -2,6 +2,7 @@ from typing import Optional, List
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, func
 from ..db import models, schemas
+from ..utils.minio_client import minio_client
 
 class PostService:
     @staticmethod
@@ -38,7 +39,7 @@ class PostService:
                 "id": post.id,
                 "title": post.title,
                 "description": post.description,
-                "image_url": post.image_url,
+                "image_url": minio_client.build_file_url(post.image_url),
                 "user_id": post.user_id,
                 "created_at": post.created_at,
                 "user": post.user,

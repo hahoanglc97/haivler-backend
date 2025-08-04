@@ -17,7 +17,7 @@ services:
       timeout: 20s
       retries: 10
     networks:
-      - haivler_network_backend
+      - haivler_network
 
   minio:
     image: minio/minio:latest
@@ -37,7 +37,7 @@ services:
       timeout: 20s
       retries: 10
     networks:
-      - haivler_network_backend
+      - haivler_network
 
   backend:
     build: .
@@ -75,8 +75,6 @@ services:
       start_period: 60s
     networks:
       - haivler_network
-      - haivler_network_backend
-
 
 volumes:
   mysql_data:
@@ -85,4 +83,3 @@ volumes:
 networks:
   haivler_network:
     name: haivler_network
-  haivler_network_backend:

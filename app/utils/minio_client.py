@@ -45,24 +45,23 @@ class MinIOClient:
                 content_type=file.content_type
             )
             
-            file_url = self.get_file_url(file_name)
-            return file_url
+            return file_name
         except S3Error as e:
             logger.error(f"Error uploading file: {e}")
             raise HTTPException(status_code=500, detail="Failed to upload file")
         except Exception as e:
             logger.error(f"Unexpected error uploading file: {e}")
             raise HTTPException(status_code=500, detail="Failed to upload file")
-    
-    def get_file_url(self, object_name: str) -> str:
+
+    def build_file_url(self, object_name: str) -> str:
         if settings.MINIO_SECURE:
             protocol = "https"
         else:
             protocol = "http"
         # Use public URL
-        url = self.client.presigned_get_object(self.bucket_name, object_name)
-        # url = f"{protocol}://{settings.MINIO_ENDPOINT}/{self.bucket_name}/{object_name}"
-        return url
+        # url = self.client.presigned_get_object(self.bucket_name, object_name)
+        url = f"{protocol}://{settings.MINIO_ENDPOINT}/{self.bucket_name}/{object_name}"
+        return url.replace("minio:9000", "localhost:9000")
     
     def delete_file(self, object_name: str) -> bool:
         try:
