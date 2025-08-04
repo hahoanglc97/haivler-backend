@@ -1,6 +1,6 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File, Query
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import desc, func
 from ..db.database import get_db
 from ..db import models, schemas
@@ -16,14 +16,14 @@ def read_posts(
     sort: str = Query("new", regex="^(new|popular)$"),
     db: Session = Depends(get_db)
 ):
-    query = db.query(models.Post)
+    query = db.query(models.Post).options(selectinload(models.Post.user))
     
     if sort == "popular":
-        query = query.outerjoin(models.Reaction).join(models.User, models.User.id == models.Post.user_id).group_by(models.Post.id).order_by(
+        query = query.outerjoin(models.Reaction).group_by(models.Post.id).order_by(
             desc(func.count(models.Reaction.id))
         )
     else:
-        query = query.join(models.User, models.User.id == models.Post.user_id).order_by(desc(models.Post.created_at))
+        query = query.order_by(desc(models.Post.created_at))
     
     posts = query.offset(skip * limit).limit(limit).all()
     
@@ -35,7 +35,10 @@ def read_posts(
 
 @router.get("/{post_id}", response_model=schemas.PostWithDetails)
 def read_post(post_id: int, db: Session = Depends(get_db)):
-    post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    post = db.query(models.Post).options(
+        selectinload(models.Post.user),
+        selectinload(models.Post.comments).selectinload(models.Comment.user)
+    ).filter(models.Post.id == post_id).first()
     if post is None:
         raise HTTPException(status_code=404, detail="Post not found")
     
