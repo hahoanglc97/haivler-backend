@@ -23,6 +23,8 @@ class Settings:
 
     CDN_ENDPOINT: str = os.getenv("CDN_ENDPOINT", "localhost:9000")
 
+    IS_PRODUCTION: bool = os.getenv("IS_PRODUCTION", "False").lower() == "true"
+
     # CORS Origins - can be set as comma-separated string in env
     CORS_ORIGINS: list = os.getenv(
         "CORS_ORIGINS", 

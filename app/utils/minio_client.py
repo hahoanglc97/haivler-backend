@@ -80,7 +80,7 @@ class MinIOClient:
             raise HTTPException(status_code=500, detail="Failed to upload file")
 
     def build_file_url(self, object_name: str) -> str:
-        if settings.MINIO_SECURE:
+        if settings.IS_PRODUCTION:
             protocol = "https"
         else:
             protocol = "http"

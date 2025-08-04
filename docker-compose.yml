@@ -61,6 +61,7 @@ services:
       - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
       - MINIO_SECURE=${MINIO_SECURE}
       - CDN_ENDPOINT=${CDN_ENDPOINT}
+      - IS_PRODUCTION=${IS_PRODUCTION}
     depends_on:
       mysql:
         condition: service_healthy
