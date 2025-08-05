@@ -9,7 +9,7 @@ from ..utils.minio_client import minio_client
 
 router = APIRouter()
 
-@router.get("/", response_model=List[schemas.Post])
+@router.get("/", response_model=List[schemas.PostWithDetails])
 def read_posts(
     skip: int = Query(0, alias="page", ge=0),
     limit: int = Query(10, ge=1, le=100),
@@ -27,11 +27,33 @@ def read_posts(
     
     posts = query.offset(skip * limit).limit(limit).all()
     
-    # Convert image_url to complete URLs
+    # Convert image_url to complete URLs and add reaction counts
+    result = []
     for post in posts:
         post.image_url = minio_client.build_file_url(post.image_url)
+        
+        # Get reaction counts
+        like_count = db.query(models.Reaction).filter(
+            models.Reaction.post_id == post.id,
+            models.Reaction.reaction_type == "like"
+        ).count()
+        
+        dislike_count = db.query(models.Reaction).filter(
+            models.Reaction.post_id == post.id,
+            models.Reaction.reaction_type == "dislike"
+        ).count()
+        
+        # Create post dict with reaction counts
+        post_dict = {
+            **post.__dict__,
+            "user": post.user,
+            "comments": [],  # Empty for list view
+            "like_count": like_count,
+            "dislike_count": dislike_count
+        }
+        result.append(post_dict)
     
-    return posts
+    return result
 
 @router.get("/{post_id}", response_model=schemas.PostWithDetails)
 def read_post(post_id: int, db: Session = Depends(get_db)):
